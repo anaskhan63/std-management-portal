@@ -38,7 +38,7 @@ const Page = () => {
     const updatedStudents = students.filter((student) => student.id !== id);
     setStudents(updatedStudents);
     notification.success({
-      message: `Record with id: ${id} deleted Successfully!`,
+      message: `Record with ID: ${id} deleted Successfully!`,
     });
     if (searchResult && searchResult.id === id) {
       setSearchResult(null);
@@ -52,12 +52,12 @@ const Page = () => {
     if (foundStudent) {
       setSearchResult(foundStudent);
       notification.success({
-        message: `Student with ID ${searchId} found!`,
+        message: `Student with ID: ${searchId} found!`,
       });
     } else {
       setSearchResult(null);
       notification.error({
-        message: `No student found with ID ${searchId}.`,
+        message: `No student found with ID: ${searchId}.`,
       });
     }
   };
