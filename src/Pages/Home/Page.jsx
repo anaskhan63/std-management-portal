@@ -1,16 +1,42 @@
-import { notification } from "antd";
-import React, { useState } from "react";
+import { message, notification } from "antd";
+import React, { useEffect, useState } from "react";
+import axiosInstance from "../../Network/axiosInstance";
 
 const Page = () => {
   const [students, setStudents] = useState([]);
+  const [isRender, setIsRender] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
-    id: "",
+    studentId: "",
     email: "",
     gender: "",
   });
   const [searchId, setSearchId] = useState("");
   const [searchResult, setSearchResult] = useState(null);
+  const fetchStudents = async () => {
+    try {
+      const response = await axiosInstance.get("/api/get-student");
+      console.log("res", response.data);
+
+      setStudents(response.data.students);
+      console.log("std", students);
+    } catch (error) {
+      console.error(error);
+      notification.error({
+        message: "Failed to fetch students!",
+      });
+    }
+  };
+
+  useEffect(() => {
+    fetchStudents();
+  }, []);
+  useEffect(() => {
+    if (isRender) {
+      fetchStudents();
+      setIsRender(false);
+    }
+  }, [isRender]);
 
   const handleChange = (e) => {
     setFormData({
@@ -19,36 +45,64 @@ const Page = () => {
     });
   };
 
-  const handleAddStudent = (e) => {
+  const handleAddStudent = async (e) => {
     e.preventDefault();
-    if (!formData.name || !formData.id || !formData.email || !formData.gender) {
+    if (
+      !formData.name ||
+      !formData.studentId ||
+      !formData.email ||
+      !formData.gender
+    ) {
       notification.error({
         message: "Please fill all fields!",
       });
       return;
     }
-    setStudents([...students, formData]);
-    setFormData({ name: "", id: "", email: "", gender: "" });
-    notification.success({
-      message: "Data Added Successfully!",
-    });
+    try {
+      message.loading("please wait");
+      const response = await axiosInstance.post("/api/register-student", {
+        name: formData.name,
+        studentId: formData.studentId,
+        email: formData.email,
+        gender: formData.gender,
+      });
+      console.log(response);
+      setStudents([...students, response.data]);
+      setIsRender(true);
+      setFormData({ name: "", studentId: "", email: "", gender: "" });
+
+      notification.success({
+        message: "Data Added Successfully!",
+      });
+      message.destroy();
+    } catch (error) {
+      console.log(error);
+      notification.error({
+        message: "Failed to add student!",
+      });
+    }
   };
 
-  const handleDeleteStudent = (id) => {
-    const updatedStudents = students.filter((student) => student.id !== id);
-    setStudents(updatedStudents);
-    notification.success({
-      message: `Record with ID: ${id} deleted Successfully!`,
-    });
-    if (searchResult && searchResult.id === id) {
-      setSearchResult(null);
-      setSearchId("");
+  const handleDeleteStudent = async (id) => {
+    try {
+      await axiosInstance.delete(`/api/delete-student/${id}`);
+      const updatedStudents = students.filter((student) => student.id !== id);
+      setStudents(updatedStudents);
+      setIsRender(true);
+      notification.success({
+        message: `Record with ID: ${id} deleted Successfully!`,
+      });
+    } catch (error) {
+      console.error(error);
+      notification.error({
+        message: `Failed to delete student with ID: ${id}!`,
+      });
     }
   };
 
   const handleSearch = (e) => {
     e.preventDefault();
-    const foundStudent = students.find((student) => student.id === searchId);
+    const foundStudent = students.filter((e) => e.studentId === searchId);
     if (foundStudent) {
       setSearchResult(foundStudent);
       notification.success({
@@ -98,8 +152,8 @@ const Page = () => {
             <input
               type="number"
               id="id"
-              name="id"
-              value={formData.id}
+              name="studentId"
+              value={formData.studentId}
               onChange={handleChange}
               className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
               placeholder="Enter student ID"
@@ -133,23 +187,23 @@ const Page = () => {
                 <input
                   type="radio"
                   name="gender"
-                  value="Male"
-                  checked={formData.gender === "Male"}
+                  value="male"
+                  checked={formData.gender === "male"}
                   onChange={handleChange}
                   className="mr-2 focus:ring-blue-500"
                 />
-                Male
+                male
               </label>
               <label className="flex items-center">
                 <input
                   type="radio"
                   name="gender"
-                  value="Female"
-                  checked={formData.gender === "Female"}
+                  value="female"
+                  checked={formData.gender === "female"}
                   onChange={handleChange}
                   className="mr-2 focus:ring-blue-500"
                 />
-                Female
+                female
               </label>
               <label className="flex items-center">
                 <input
@@ -202,16 +256,16 @@ const Page = () => {
             </h3>
             <div className="p-4 text-sm md:text-base bg-gray-100 rounded-md">
               <p>
-                <strong>ID:</strong> {searchResult.id}
+                <strong>ID:</strong> {searchResult[0].studentId}
               </p>
               <p>
-                <strong>Name:</strong> {searchResult.name}
+                <strong>Name:</strong> {searchResult[0].name}
               </p>
               <p>
-                <strong>Email:</strong> {searchResult.email}
+                <strong>Email:</strong> {searchResult[0].email}
               </p>
               <p>
-                <strong>Gender:</strong> {searchResult.gender}
+                <strong>Gender:</strong> {searchResult[0].gender}
               </p>
             </div>
           </div>
@@ -234,15 +288,15 @@ const Page = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {students.map((student) => (
-                    <tr key={student.id} className="border-t">
-                      <td className="p-3">{student.id}</td>
+                  {students.map((student,i) => (
+                    <tr key={i} className="border-t">
+                      <td className="p-3">{student.studentId}</td>
                       <td className="p-3">{student.name}</td>
                       <td className="p-3">{student.email}</td>
                       <td className="p-3">{student.gender}</td>
                       <td className="p-3">
                         <button
-                          onClick={() => handleDeleteStudent(student.id)}
+                          onClick={() => handleDeleteStudent(student._id)}
                           className="bg-red-500 text-white px-4 py-1 rounded-md hover:bg-red-600 focus:ring-2 focus:ring-red-300"
                         >
                           Delete
