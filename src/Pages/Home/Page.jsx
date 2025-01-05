@@ -200,7 +200,7 @@ const Page = () => {
             <h3 className="text-xl font-semibold text-gray-700 mb-4">
               Search Result
             </h3>
-            <div className="p-4 bg-gray-100 rounded-md">
+            <div className="p-4 text-sm md:text-base bg-gray-100 rounded-md">
               <p>
                 <strong>ID:</strong> {searchResult.id}
               </p>
