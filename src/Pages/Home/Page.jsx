@@ -103,7 +103,7 @@ const Page = () => {
   const handleSearch = (e) => {
     e.preventDefault();
     const foundStudent = students.filter((e) => e.studentId === searchId);
-    if (foundStudent) {
+    if (foundStudent.length>0) {
       setSearchResult(foundStudent);
       notification.success({
         message: `Student with ID: ${searchId} found!`,
@@ -212,7 +212,7 @@ const Page = () => {
                   disabled
                   className="mr-2 focus:ring-blue-500"
                 />
-                There is no other nigga!!
+                There is no other.
               </label>
             </div>
           </div>
@@ -256,16 +256,16 @@ const Page = () => {
             </h3>
             <div className="p-4 text-sm md:text-base bg-gray-100 rounded-md">
               <p>
-                <strong>ID:</strong> {searchResult[0].studentId}
+                <strong>ID:</strong> {searchResult[0]?.studentId}
               </p>
               <p>
-                <strong>Name:</strong> {searchResult[0].name}
+                <strong>Name:</strong> {searchResult[0]?.name}
               </p>
               <p>
-                <strong>Email:</strong> {searchResult[0].email}
+                <strong>Email:</strong> {searchResult[0]?.email}
               </p>
               <p>
-                <strong>Gender:</strong> {searchResult[0].gender}
+                <strong>Gender:</strong> {searchResult[0]?.gender}
               </p>
             </div>
           </div>
