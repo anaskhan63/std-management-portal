@@ -208,7 +208,6 @@ const Page = () => {
               <label className="flex items-center">
                 <input
                   type="radio"
-                  value="Female"
                   disabled
                   className="mr-2 focus:ring-blue-500"
                 />
