@@ -117,6 +117,7 @@ const Page = () => {
   };
 
   return (
+<>
     <div className="min-h-screen bg-gray-100 p-4">
       <div className="max-w-4xl mx-auto bg-white shadow-lg rounded-lg p-6">
         <h2 className="text-2xl font-semibold text-gray-700 mb-6 text-center">
@@ -309,6 +310,10 @@ const Page = () => {
           </div>
         )}
       </div>
+    </div>
+  );
+
+<p> 
 def caesar_cipher(text, shift, encrypt=True):
     result = ""
     for char in text:
@@ -331,8 +336,9 @@ print(f"Encrypted: {encrypted_text}")
 
 decrypted_text = caesar_cipher(encrypted_text, shift, encrypt=False)
 print(f"Decrypted: {decrypted_text}")
-    </div>
-  );
+
+</p>
+</>
 };
 
 export default Page;
