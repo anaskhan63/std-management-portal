@@ -309,6 +309,28 @@ const Page = () => {
           </div>
         )}
       </div>
+def caesar_cipher(text, shift, encrypt=True):
+    result = ""
+    for char in text:
+        if char.isalpha():
+            shift_amount = shift if encrypt else -shift
+            new_char = chr(((ord(char.lower()) - ord('a') + shift_amount) % 26) + ord('a'))
+            result += new_char if char.islower() else new_char.upper()
+        else:
+            result += char
+    return result
+
+
+text = "anaskhan"
+shift = 15
+
+
+encrypted_text = caesar_cipher(text, shift, encrypt=True)
+print(f"Encrypted: {encrypted_text}")
+
+
+decrypted_text = caesar_cipher(encrypted_text, shift, encrypt=False)
+print(f"Decrypted: {decrypted_text}")
     </div>
   );
 };
