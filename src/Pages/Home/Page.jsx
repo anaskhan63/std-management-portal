@@ -103,7 +103,7 @@ const Page = () => {
   const handleSearch = (e) => {
     e.preventDefault();
     const foundStudent = students.filter((e) => e.studentId === searchId);
-    if (foundStudent.length>0) {
+    if (foundStudent.length > 0) {
       setSearchResult(foundStudent);
       notification.success({
         message: `Student with ID: ${searchId} found!`,
@@ -117,7 +117,6 @@ const Page = () => {
   };
 
   return (
-<>
     <div className="min-h-screen bg-gray-100 p-4">
       <div className="max-w-4xl mx-auto bg-white shadow-lg rounded-lg p-6">
         <h2 className="text-2xl font-semibold text-gray-700 mb-6 text-center">
@@ -288,7 +287,7 @@ const Page = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {students.map((student,i) => (
+                  {students.map((student, i) => (
                     <tr key={i} className="border-t">
                       <td className="p-3">{student.studentId}</td>
                       <td className="p-3">{student.name}</td>
@@ -312,33 +311,6 @@ const Page = () => {
       </div>
     </div>
   );
-
-<p> 
-def caesar_cipher(text, shift, encrypt=True):
-    result = ""
-    for char in text:
-        if char.isalpha():
-            shift_amount = shift if encrypt else -shift
-            new_char = chr(((ord(char.lower()) - ord('a') + shift_amount) % 26) + ord('a'))
-            result += new_char if char.islower() else new_char.upper()
-        else:
-            result += char
-    return result
-
-
-text = "anaskhan"
-shift = 15
-
-
-encrypted_text = caesar_cipher(text, shift, encrypt=True)
-print(f"Encrypted: {encrypted_text}")
-
-
-decrypted_text = caesar_cipher(encrypted_text, shift, encrypt=False)
-print(f"Decrypted: {decrypted_text}")
-
-</p>
-</>
 };
 
 export default Page;
